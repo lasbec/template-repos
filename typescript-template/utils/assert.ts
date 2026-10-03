@@ -1,5 +1,5 @@
 import type { none } from './none';
-import {Str} from "./str";
+import { Str } from './str';
 
 export class AssertionError extends Error {
   constructor(

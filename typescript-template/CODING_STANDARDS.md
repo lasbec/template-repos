@@ -3,6 +3,19 @@
 Every rule in this document is mandatory within its stated scope. The exceptions
 described below are part of the rules.
 
+## Use existing tools when their semantics match
+
+Check the available tools and utilities before implementing an operation. Use an
+existing tool or utility when its intended purpose and behavior match the task,
+instead of rewriting the same operation. Check its input assumptions, output
+meaning, error behavior, and side effects before choosing it.
+
+Do not reuse a tool whose intended semantics differ from the task merely because
+its implementation looks similar or produces the desired output for some inputs.
+Code duplication is allowed. Similar code serving different purposes does not
+have to share a utility, and this rule does not require extracting new utilities
+to eliminate duplication.
+
 ## Function and class definitions
 
 ### Use abstract classes for namespacing
@@ -71,6 +84,21 @@ export const E = {a: 5} as const;
 export type E = (typeof E)[keyof typeof E];
 ```
 
+### Use quantity types for physical measurements
+
+Do not store or pass lengths, angles, time spans, or other physical measurements
+as plain numbers in application code. Use quantity types that carry the kind of
+measurement and its unit, such as those provided by
+[unitsnet-js](https://www.npmjs.com/package/unitsnet-js), or an equivalent
+library. A name such as `lengthMeters` does not replace a quantity type.
+
+Validate incoming measurements and convert them to quantity types at entry
+points. Convert to a number in an explicit unit only when an external API or
+output format requires it. Persist or serialize measurements with their units
+explicitly recorded in the data or schema, and restore quantity types when
+reading them. Use the quantity library's conversion and arithmetic operations to
+keep units consistent.
+
 ## Errors
 
 ### Return expected failures through Result
@@ -78,9 +106,10 @@ export type E = (typeof E)[keyof typeof E];
 Use `Result<T, E>` for expected failures that callers can handle. Callers must
 inspect or propagate an error result. Do not silently discard a `Result`.
 
-Use assertions only for conditions guaranteed by repository logic, not
-for invalid user input or external data. Call `unwrap` only when an error would
-demonstrate a broken internal invariant. Throwing is only allowed using `unwrap` or an assertion.
+Use assertions only for conditions guaranteed by repository logic, not for
+invalid user input or external data. Call `unwrap` only when an error would
+demonstrate a broken internal invariant. Throwing is only allowed using `unwrap`
+or an assertion.
 
 Do not catch assertion failures or failed invariant unwraps to turn them into
 ordinary error results. Fix the violated invariant.
@@ -136,7 +165,7 @@ or explicitly started with a rejection handler. Background work must have an
 explicit failure handler. Using `void` alone does not handle a rejected promise.
 Handle asynchronous error results as well as promise rejections.
 
-# DOM development
+## DOM development
 
 Remove this section in projects that do not work with the DOM.
 
