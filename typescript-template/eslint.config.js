@@ -23,12 +23,17 @@ export default [
       local: { rules: { 'require-used-return-value': requireUsedReturnValue } },
     },
     rules: {
+      'no-var': 'warn',
       'local/require-used-return-value': 'warn',
       'no-restricted-syntax': [
         'warn',
         {
           selector: 'ThrowStatement',
           message: 'Do not use throw statements.',
+        },
+        {
+          selector: 'TSEnumDeclaration',
+          message: 'Do not use enum declarations.',
         },
       ],
       'check-file/filename-naming-convention': [

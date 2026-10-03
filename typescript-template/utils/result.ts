@@ -77,6 +77,7 @@ export class ErCase<E> {
 export class UnwrapError extends Error {}
 
 export type Result<R, E = Error> = OkCase<R> | ErCase<E>;
+export type PResult<R, E = Error> = Promise<Result<R, E>>;
 
 export function ok<R>(result: R): OkCase<R> {
   return new OkCase<R>(result);
